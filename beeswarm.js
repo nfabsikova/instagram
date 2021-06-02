@@ -1,6 +1,6 @@
 
 // Dimensions of chart.
-let margin = { top: 20, right: 10, bottom: 40, left: 56 }
+let margin = { top: 30, right: 10, bottom: 30, left: 56 }
 let width = 800 - margin.left - margin.right
 let height = 700 - margin.top - margin.bottom; 
 
@@ -30,16 +30,22 @@ let xAxisEl = chart.append("g")
   .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(xAxis);
 
+xAxisEl.append("text")
+  .attr("class", "x axis label")
+  .text("month")
+    .attr("transform", "translate(" + width/2 + ", 55)")
+
   // y-axis
   let yAxis = d3.axisLeft(y)
   .tickSize(8)
-  .tickPadding(5);
+  .tickPadding(5)
+  .ticks(2)
+  .tickFormat(d3.format("d"));
 
 let yAxisEl = chart.append("g")
   .attr("class", "y axis left")
   // .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(yAxis)
-
 
 // Load data.
 const posts = d3.csv("data.csv", ({id, month, year, season}) => 
@@ -48,32 +54,40 @@ const posts = d3.csv("data.csv", ({id, month, year, season}) =>
 posts.then(function (data) {
   console.log(data);
 
+    //horizontal lines
+    let hlines = chart.append("g")
+    .attr("class", "hlines")
+    .selectAll("line")
+    .data([2018, 2019, 2020])
+    .join("line")
+      .attr("x1", 0)
+      .attr("x2", x(12.5))
+      .attr("y1", d => y(d))
+      .attr("y2", d => y(d))
+
   // Create node data.
   let nodes = data.map(function(d,i) {		
     return {
         id: "node"+i,
         x: x(d.month) + Math.random(),
-        y: y(d.year) - 50 +  Math.random() * 100,
+        y: y(d.year)  - 50 +  Math.random() * 100,
         r: 5,
         month: d.month,
         year: d.year,
-        color: "#F24088",
         data: d
     }
   });
 
-  console.log(nodes);
-
   // Circle for each node.
 	let circle = chart.append("g")
+  .attr("class", "circles")
   .selectAll("circle")
    .data(nodes)
    .join("circle")
    .attr("id", d => "circle"+d.id)
    .attr("cx", d => d.x)
    .attr("cy", d => d.y)
-  //  .attr("r", d => d.r)
-   .attr("fill", d => d.color)
+   .style("fill", "var(--main)")
 
     // Ease in the circles.
     circle.transition()
@@ -83,19 +97,12 @@ posts.then(function (data) {
       	    const i = d3.interpolate(0, d.r);
       	    return t => d.r = i(t);
     	});
-	
+
 
    //Tooltips
    let tooltip = d3.select("#chart")
     .append("div")
-    .style("pointer-events", "none")
-    .style("position", "absolute")
-    .style("visibility", "hidden")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "1px")
-    .style("border-radius", "5px")
-    .style("padding", "10px");
+    .attr("class", "tooltip")
 
    	// Forces
 	simulation = d3.forceSimulation(nodes)
@@ -106,7 +113,7 @@ posts.then(function (data) {
     .alphaDecay(0)
   .on("tick", onSimulationTick);
 
-  const simulationDurationInMs = 5000; // 20 seconds
+  const simulationDurationInMs = 4000; 
 
   let startTime = Date.now();
   let endTime = startTime + simulationDurationInMs;
@@ -123,31 +130,28 @@ posts.then(function (data) {
           //Interaction
           d3.selectAll("circle").on("mouseover", function(event, d) {
 
-            d3.select(this).attr("fill", "#F5C549").attr("r", 7);
+            d3.select(this).style("fill", "var(--hover)").attr("r", 7);
             tooltip.style("visibility", "visible");
-            tooltip.style("top", (Number(d3.select(this).attr("cy")) + 50) + "px");
-            tooltip.style("left", (Number(d3.select(this).attr("cx")) + 50) + "px");
 
-            let id = String(d.data.id);
-            console.log(id);
-            console.log(id.length);
-            let comparison = "1693826311004235126";
-
-            for (let i = 0; i < id.length; i++) {
-              console.log(id[i] === comparison[i]);
-              if (id[i] !== comparison[i]) {
-                console.log(id.charCodeAt(i));
-                console.log(comparison.charCodeAt(i));
-              }
+            if (Number(d3.select(this).attr("cy")) < height/2) {
+              tooltip.classed("bottom", true)
+              tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
+              tooltip.style("top", (Number(d3.select(this).attr("cy")) + 60) + "px");
+            } else {
+              tooltip.classed("bottom", false)
+              tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
+              tooltip.style("top", (Number(d3.select(this).attr("cy")) -194) + "px");
             }
 
-            console.log("1693826311004235126".length === id.length);
-            console.log(id === "1693826311004235126");
-            tooltip.html("<img src=\"./natural_images/" + id + ".jpeg\">");
+
+
+            let id = String(d.data.id);
+
+            tooltip.html("<img src=\"./natural_images/" + id + ".jpeg\" height=200>");
           
 
           }).on("mouseout", function(event, d) {
-            d3.select(this).attr("fill", "#F24088").attr("r", 5);
+            d3.select(this).style("fill", "var(--main)").attr("r", 5);
             tooltip.style("visibility", "hidden");
           })
       }

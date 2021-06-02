@@ -1,0 +1,103 @@
+html {
+  --main: #F24088;
+  --hover: #F5C549;
+  --gray: #5C5A5A;
+  --light-gray: #F2F2F2;
+}
+/* axes formatting */
+
+.axis path,
+.y.axis line {
+    stroke: none;
+}
+
+.x.axis line {
+  stroke: var(--gray);
+}
+
+.hlines line{
+  stroke: var(--light-gray);
+}
+
+/* text formatting */
+
+.axis text {
+  font-family: Helvetica;
+  font-size: 14px;
+}
+
+.y.axis text {
+  fill: var(--main);
+  font-weight: bold;
+}
+
+.x.axis.label {
+  font-weight: bold;
+}
+
+.x.axis text {
+  fill: var(--gray)
+}
+
+/* tooltip */
+
+/* .tooltip {
+  pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+  background-color: white;
+  border: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 10px;
+} */
+
+/* base CSS element */
+.tooltip {
+  pointer-events: none;
+	background: white;
+	border: 1px solid var(--main);
+  visibility: hidden;
+	padding: 5px;
+	position: absolute;
+  height: 200px;
+}
+
+/* arrows - :before and :after */
+
+.tooltip:before {
+	position: absolute;
+	display: inline-block;
+	border-top: 22px solid var(--main);
+	border-right: 22px solid transparent;
+	border-bottom: 22px solid transparent;
+	left: -1px;
+	top: 210px;
+	content: '';
+}
+
+.tooltip:after {
+	position: absolute;
+	display: inline-block;
+	border-right: 20px solid transparent;
+	border-top: 20px solid white;
+	border-bottom: 20px solid transparent;
+	left: 0px;
+	top: 210px;
+	content: '';
+}
+ .tooltip.bottom:before {
+	border-bottom: 22px solid var(--main);
+	border-top: 22px solid transparent;
+	top: -45px;
+}
+
+.tooltip.bottom:after {
+	border-bottom: 20px solid white;
+	border-top: 20px solid transparent;
+	top: -40px;
+}
+
+
+
+
