@@ -3,6 +3,7 @@
 let margin = { top: 30, right: 10, bottom: 30, left: 56 }
 let width = 800 - margin.left - margin.right
 let height = 700 - margin.top - margin.bottom; 
+let tickLabels = ['Jan','Feb','Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 let chart = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -23,7 +24,8 @@ let y = d3.scaleLinear()
 // x-axis
 let xAxis = d3.axisBottom(x)
   .tickSize(8)
-  .tickPadding(5);
+  .tickPadding(5)
+  .tickFormat(function(d,i){ return tickLabels[i] });
 
 let xAxisEl = chart.append("g")
   .attr("class", "x axis bottom")
@@ -54,6 +56,18 @@ const posts = d3.csv("data.csv", ({id, month, year, season}) =>
 posts.then(function (data) {
   console.log(data);
 
+
+    //vertical lines
+    let vlines = chart.append("g")
+    .attr("class", "vlines")
+    .selectAll("line")
+    .data([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+    .join("line")
+      .attr("x1", d => x(d) + 0.5)
+      .attr("x2", d => x(d) + 0.5)
+      .attr("y1", 0)
+      .attr("y2", height - margin.bottom)
+
     //horizontal lines
     let hlines = chart.append("g")
     .attr("class", "hlines")
@@ -64,6 +78,7 @@ posts.then(function (data) {
       .attr("x2", x(12.5))
       .attr("y1", d => y(d))
       .attr("y2", d => y(d))
+
 
   // Create node data.
   let nodes = data.map(function(d,i) {		
@@ -134,11 +149,11 @@ posts.then(function (data) {
             tooltip.style("visibility", "visible");
 
             if (Number(d3.select(this).attr("cy")) < height/2) {
-              tooltip.classed("bottom", true)
+              tooltip.classed("top", true)
               tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
               tooltip.style("top", (Number(d3.select(this).attr("cy")) + 60) + "px");
             } else {
-              tooltip.classed("bottom", false)
+              tooltip.classed("top", false)
               tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
               tooltip.style("top", (Number(d3.select(this).attr("cy")) -194) + "px");
             }
@@ -147,7 +162,7 @@ posts.then(function (data) {
 
             let id = String(d.data.id);
 
-            tooltip.html("<img src=\"./natural_images/" + id + ".jpeg\" height=200>");
+            tooltip.html("<img src=\"./beeswarm_medicka_pictures/" + id + ".jpg\" height=200>");
           
 
           }).on("mouseout", function(event, d) {

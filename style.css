@@ -16,6 +16,10 @@ html {
 }
 
 .hlines line{
+  stroke: var(--main);
+}
+
+.vlines line{
   stroke: var(--light-gray);
 }
 
@@ -71,6 +75,7 @@ html {
 	border-top: 22px solid var(--main);
 	border-right: 22px solid transparent;
 	border-bottom: 22px solid transparent;
+  border-left: 22px transparent;
 	left: -1px;
 	top: 210px;
 	content: '';
@@ -86,17 +91,20 @@ html {
 	top: 210px;
 	content: '';
 }
- .tooltip.bottom:before {
+ .tooltip.top:before {
 	border-bottom: 22px solid var(--main);
 	border-top: 22px solid transparent;
 	top: -45px;
 }
 
-.tooltip.bottom:after {
+.tooltip.top:after {
 	border-bottom: 20px solid white;
 	border-top: 20px solid transparent;
 	top: -40px;
 }
+
+
+
 
 
 
