@@ -12,7 +12,7 @@ html {
 }
 
 .x.axis line {
-  stroke: var(--gray);
+  stroke: var(--light-gray);
 }
 
 .hlines line{
