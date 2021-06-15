@@ -51,7 +51,7 @@ const posts = d3.csv("data.csv", ({id, month, year, season}) =>
 posts.then(function (data) {
 
   //get images dimensions data
-  let dims = d3.csv("beeswarm_medicka_pictures/dims.csv");
+  let dims = d3.csv("dims.csv");
 
   dims.then(function(dims) {
 
