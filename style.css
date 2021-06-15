@@ -65,6 +65,7 @@ html {
 	padding: 5px;
 	position: absolute;
   height: 200px;
+  width: 200px;
 }
 
 /* arrows - :before and :after */
