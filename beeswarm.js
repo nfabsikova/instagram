@@ -163,7 +163,8 @@ posts.then(function (data) {
                 let imgHeight = 200;
                 let imgWidth = imgHeight * imgRatio;
 
-                tooltip.style("width", imgWidth)
+                tooltip.style("width", imgWidth + "px");
+                console.log(tooltip);
                 tooltip.html("<img src=\"./beeswarm_medicka_pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
               
     
