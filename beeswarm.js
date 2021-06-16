@@ -45,10 +45,11 @@ let yAxisEl = chart.append("g")
   .call(yAxis)
 
 // Load data.
-const posts = d3.csv("data.csv", ({id, month, year, season}) => 
-  ({id: id, month: +month, year: +year, season: season}));
+const posts = d3.csv("data.csv", ({id, timestamp, month, year, likes, comments, post_url}) => 
+  ({id: id, timestamp: timestamp, month: +month, year: +year, likes: +likes, comments: +comments, url: post_url}));
 
 posts.then(function (data) {
+  console.log(data);
 
   //get images dimensions data
   let dims = d3.csv("dims.csv");
@@ -142,6 +143,8 @@ posts.then(function (data) {
     
               //Interaction
               d3.selectAll("circle").on("mouseover", function(event, d) {
+
+                d3.select(this).style("cursor", "pointer"); 
     
                 d3.select(this).style("fill", "var(--hover)").attr("r", 7);
                 tooltip.style("visibility", "visible");
@@ -153,24 +156,37 @@ posts.then(function (data) {
                 } else {
                   tooltip.classed("top", false)
                   tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  tooltip.style("top", (Number(d3.select(this).attr("cy")) -194) + "px");
+                  tooltip.style("top", (Number(d3.select(this).attr("cy")) -264) + "px");
                 }
     
     
     
                 let id = String(d.data.id);
                 let imgRatio = dims.find(x => x.id == (id + ".jpg")).height / dims.find(x => x.id == (id + ".jpg")).width;
-                let imgHeight = 200;
+                let imgHeight = 250;
                 let imgWidth = imgHeight * imgRatio;
 
                 tooltip.style("width", imgWidth + "px");
-                console.log(tooltip);
                 tooltip.html("<img src=\"./beeswarm_medicka_pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
+
+                let likes = String(d.data.likes);
+                let comments = String(d.data.comments);
+
+                let meta = tooltip.append("div")
+                meta.append("span").style("font-weight", "bold").text("likes: ");
+                meta.append("span").text(likes);
+                meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
+                meta.append("span").text(comments);
               
     
               }).on("mouseout", function(event, d) {
                 d3.select(this).style("fill", "var(--main)").attr("r", 5);
                 tooltip.style("visibility", "hidden");
+
+              }).on("click", function(event, d) {
+                let url = d.data.url;
+                console.log(url);
+                window.open(url, '_blank');
               })
           }
       }
