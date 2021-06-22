@@ -59,12 +59,11 @@ html {
 
 /* base CSS element */
 .tooltip {
-  pointer-events: none;
+  display: block;
 	background: white;
   visibility: hidden;
-  padding: 5px;
 	position: absolute;
-  height: 275px;
+  height: 200px;
   width: 200px;
 }
 
@@ -76,6 +75,11 @@ html {
   font-family: Helvetica;
   font-size: 14px;
   color: var(--main);
+}
+
+a {
+  color: var(--main);
+  margin-left: 0.25em;
 }
 
 /* arrows - :before and :after */

@@ -11,7 +11,6 @@ let chart = d3.select("#chart").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-
 // Scales
 let x = d3.scaleLinear()
 	.domain([1, 12])
@@ -140,12 +139,12 @@ posts.then(function (data) {
               .attr("fill", d => d.color);
           } else {
               simulation.stop();
-    
+
+              let clicked = false;
               //Interaction
               d3.selectAll("circle").on("mouseover", function(event, d) {
 
                 d3.select(this).style("cursor", "pointer"); 
-    
                 d3.select(this).style("fill", "var(--hover)").attr("r", 7);
                 tooltip.style("visibility", "visible");
     
@@ -156,10 +155,8 @@ posts.then(function (data) {
                 } else {
                   tooltip.classed("top", false)
                   tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  tooltip.style("top", (Number(d3.select(this).attr("cy")) -264) + "px");
+                  tooltip.style("top", (Number(d3.select(this).attr("cy")) -280) + "px");
                 }
-    
-    
     
                 let id = String(d.data.id);
                 let imgRatio = dims.find(x => x.id == (id + ".jpg")).height / dims.find(x => x.id == (id + ".jpg")).width;
@@ -169,24 +166,57 @@ posts.then(function (data) {
                 tooltip.style("width", imgWidth + "px");
                 tooltip.html("<img src=\"./beeswarm_medicka_pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
 
-                let likes = String(d.data.likes);
-                let comments = String(d.data.comments);
+                d3.select(this).on("click", function(event, d) {
 
-                let meta = tooltip.append("div")
-                meta.append("span").style("font-weight", "bold").text("likes: ");
-                meta.append("span").text(likes);
-                meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
-                meta.append("span").text(comments);
+                  let likes = String(d.data.likes);
+                  let comments = String(d.data.comments);
+                  let meta = tooltip.append("div")
+                  let url = d.data.url;
+
+                  meta.append("span").style("font-weight", "bold").style("margin-left","0.25em").text("likes: ");
+                  meta.append("span").text(likes);
+                  meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
+                  meta.append("span").text(comments + " ");
+                  meta.append("span").style("margin-left","0.25em").html("<br> <a href=" + url + " target=_blank>post link</a>");
+
+
+                  tooltip.style("height", "300px");
+
+                  d3.select(this).style("fill", "var(--hover)").attr("r", 7);
+
+
+
+                  d3.select("body").on("click", function(event, d) {
+
+                    if (clicked) {
+                      d3.selectAll("circle").style("pointer-events", "all");
+                      tooltip.style("height", "200px").style("visibility", "hidden");
+                      tooltip.select("div").remove();
+                      d3.selectAll("circle").style("fill", "var(--main)").attr("r", 5);
+
+                      clicked = false;
+                    } else {
+
+                      d3.selectAll("circle").style("pointer-events", "none");
+                      clicked = true;
+                    }
+
+                  })
+                })
               
     
               }).on("mouseout", function(event, d) {
-                d3.select(this).style("fill", "var(--main)").attr("r", 5);
-                tooltip.style("visibility", "hidden");
+                if(!clicked) {
+                  d3.select(this).style("fill", "var(--main)").attr("r", 5);
+                  tooltip.style("height", "200px").style("visibility", "hidden");
+                }
 
-              }).on("click", function(event, d) {
-                let url = d.data.url;
-                console.log(url);
-                window.open(url, '_blank');
+                console.log(clicked);
+
+
+
+
+
               })
           }
       }
