@@ -44,16 +44,11 @@ let yAxisEl = chart.append("g")
   .call(yAxis)
 
 // Load data.
-const posts = d3.csv("data.csv", ({id, timestamp, month, year, likes, comments, post_url}) => 
-  ({id: id, timestamp: timestamp, month: +month, year: +year, likes: +likes, comments: +comments, url: post_url}));
+const posts = d3.csv("./data/data.csv", ({id, timestamp, month, year, likes, comments, post_url, height, width}) => 
+  ({id: id, timestamp: timestamp, month: +month, year: +year, likes: +likes, comments: +comments, url: post_url, height: +height, width: + width}));
 
 posts.then(function (data) {
   console.log(data);
-
-  //get images dimensions data
-  let dims = d3.csv("dims.csv");
-
-  dims.then(function(dims) {
 
         //vertical lines
         let vlines = chart.append("g")
@@ -159,12 +154,12 @@ posts.then(function (data) {
                 }
     
                 let id = String(d.data.id);
-                let imgRatio = dims.find(x => x.id == (id + ".jpg")).height / dims.find(x => x.id == (id + ".jpg")).width;
+                let imgRatio = d.data.height / d.data.width
                 let imgHeight = 250;
                 let imgWidth = imgHeight * imgRatio;
 
                 tooltip.style("width", imgWidth + "px");
-                tooltip.html("<img src=\"./beeswarm_medicka_pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
+                tooltip.html("<img src=\"./data/pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
 
                 d3.select(this).on("click", function(event, d) {
 
@@ -183,7 +178,6 @@ posts.then(function (data) {
                   tooltip.style("height", "300px");
 
                   d3.select(this).style("fill", "var(--hover)").attr("r", 7);
-
 
 
                   d3.select("body").on("click", function(event, d) {
@@ -211,18 +205,9 @@ posts.then(function (data) {
                   tooltip.style("height", "200px").style("visibility", "hidden");
                 }
 
-                console.log(clicked);
-
-
-
-
-
               })
           }
       }
-
-
-  })
 
 
 });
