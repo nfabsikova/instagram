@@ -7,40 +7,40 @@ html {
 
 /* axes formatting */
 
-.axis path,
-.y.axis line {
+.beeswarm.axis path,
+.beeswarm.y.axis line {
     stroke: none;
 }
 
-.x.axis line {
+.beeswarm.x.axis line {
   stroke: var(--light-gray);
 }
 
-.hlines line{
+.beeswarm.hlines line{
   stroke: var(--main);
 }
 
-.vlines line{
+.beeswarm.vlines line{
   stroke: var(--light-gray);
 }
 
 /* text formatting */
 
-.axis text {
+.beeswarm.axis text {
   font-family: Helvetica;
   font-size: 14px;
 }
 
-.y.axis text {
+.beeswarm.y.axis text {
   fill: var(--main);
   font-weight: bold;
 }
 
-.x.axis.label {
+.beeswarm.x.axis.label {
   font-weight: bold;
 }
 
-.x.axis text {
+.beeswarm.x.axis text {
   fill: var(--gray)
 }
 
@@ -58,7 +58,7 @@ html {
 } */
 
 /* base CSS element */
-.tooltip {
+.beeswarm.tooltip {
   display: block;
 	background: white;
   visibility: hidden;
@@ -67,17 +67,17 @@ html {
   width: 200px;
 }
 
-.tooltip div {
+.beeswarm.tooltip div {
   margin-top: 2px;
 }
 
-.tooltip span {
+.beeswarm.tooltip span {
   font-family: Helvetica;
   font-size: 14px;
   color: var(--main);
 }
 
-a {
+.tooltip a {
   color: var(--main);
   margin-left: 0.25em;
 }

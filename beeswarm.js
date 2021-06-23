@@ -27,7 +27,7 @@ let xAxis = d3.axisBottom(x)
   .tickFormat(function(d,i){ return tickLabels[i] });
 
 let xAxisEl = beeswarm.append("g")
-  .attr("class", "x axis bottom")
+  .attr("class", "beeswarm x axis bottom")
   .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(xAxis);
 
@@ -39,7 +39,7 @@ let xAxisEl = beeswarm.append("g")
   .tickFormat(d3.format("d"));
 
 let yAxisEl = beeswarm.append("g")
-  .attr("class", "y axis left")
+  .attr("class", "beeswarm y axis left")
   // .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(yAxis)
 
@@ -48,11 +48,10 @@ const posts = d3.csv("./data/data.csv", ({id, timestamp, month, year, likes, com
   ({id: id, timestamp: timestamp, month: +month, year: +year, likes: +likes, comments: +comments, url: post_url, height: +height, width: + width}));
 
 posts.then(function (data) {
-  console.log(data);
 
         //vertical lines
         let vlines = beeswarm.append("g")
-        .attr("class", "vlines")
+        .attr("class", "beeswarm vlines")
         .selectAll("line")
         .data([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
         .join("line")
@@ -63,7 +62,7 @@ posts.then(function (data) {
     
         //horizontal lines
         let hlines = beeswarm.append("g")
-        .attr("class", "hlines")
+        .attr("class", "beeswarm hlines")
         .selectAll("line")
         .data([2018, 2019, 2020])
         .join("line")
@@ -110,7 +109,7 @@ posts.then(function (data) {
        //Tooltips
        let tooltip = d3.select("#chart")
         .append("div")
-        .attr("class", "tooltip")
+        .attr("class", "beeswarm tooltip")
     
          // Forces
       simulation = d3.forceSimulation(nodes)
@@ -175,7 +174,7 @@ posts.then(function (data) {
                   //meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
                   meta.append("span").style("margin-left","0.25em").html("<img src=\"./style/insta_icons_comment.svg\" height = 12px>")
                   meta.append("span").text(" " + comments + " ");
-                  meta.append("span").style("margin-left","0.25em").html("<a href=" + url + " target=_blank>original</a>");
+                  meta.append("span").style("margin-left","0.25em").html("<a href=" + url + " target=_blank class=tooltip>original</a>");
 
 
                   tooltip.style("height", "280px");
