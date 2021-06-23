@@ -5,7 +5,7 @@ let width = 800 - margin.left - margin.right
 let height = 700 - margin.top - margin.bottom; 
 let tickLabels = ['Jan','Feb','Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-let chart = d3.select("#chart").append("svg")
+let beeswarm = d3.select("#chart").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
@@ -26,7 +26,7 @@ let xAxis = d3.axisBottom(x)
   .tickPadding(5)
   .tickFormat(function(d,i){ return tickLabels[i] });
 
-let xAxisEl = chart.append("g")
+let xAxisEl = beeswarm.append("g")
   .attr("class", "x axis bottom")
   .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(xAxis);
@@ -38,7 +38,7 @@ let xAxisEl = chart.append("g")
   .ticks(2)
   .tickFormat(d3.format("d"));
 
-let yAxisEl = chart.append("g")
+let yAxisEl = beeswarm.append("g")
   .attr("class", "y axis left")
   // .attr("transform", "translate (0, " + (height - margin.bottom) + ")")
   .call(yAxis)
@@ -51,7 +51,7 @@ posts.then(function (data) {
   console.log(data);
 
         //vertical lines
-        let vlines = chart.append("g")
+        let vlines = beeswarm.append("g")
         .attr("class", "vlines")
         .selectAll("line")
         .data([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
@@ -62,7 +62,7 @@ posts.then(function (data) {
           .attr("y2", height - margin.bottom)
     
         //horizontal lines
-        let hlines = chart.append("g")
+        let hlines = beeswarm.append("g")
         .attr("class", "hlines")
         .selectAll("line")
         .data([2018, 2019, 2020])
@@ -87,7 +87,7 @@ posts.then(function (data) {
       });
     
       // Circle for each node.
-      let circle = chart.append("g")
+      let circle = beeswarm.append("g")
       .attr("class", "circles")
       .selectAll("circle")
        .data(nodes)
@@ -137,7 +137,7 @@ posts.then(function (data) {
 
               let clicked = false;
               //Interaction
-              d3.selectAll("circle").on("mouseover", function(event, d) {
+              beeswarm.selectAll("circle").on("mouseover", function(event, d) {
 
                 d3.select(this).style("cursor", "pointer"); 
                 d3.select(this).style("fill", "var(--hover)").attr("r", 7);
@@ -154,6 +154,7 @@ posts.then(function (data) {
                 }
     
                 let id = String(d.data.id);
+                console.log(d);
                 let imgRatio = d.data.height / d.data.width
                 let imgHeight = 250;
                 let imgWidth = imgHeight * imgRatio;
@@ -168,14 +169,16 @@ posts.then(function (data) {
                   let meta = tooltip.append("div")
                   let url = d.data.url;
 
-                  meta.append("span").style("font-weight", "bold").style("margin-left","0.25em").text("likes: ");
-                  meta.append("span").text(likes);
-                  meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
-                  meta.append("span").text(comments + " ");
-                  meta.append("span").style("margin-left","0.25em").html("<br> <a href=" + url + " target=_blank>post link</a>");
+                  //meta.append("span").style("font-weight", "bold").style("margin-left","0.25em").text("likes: ");
+                  meta.append("span").style("margin-left","0.25em").html("<img src=\"./style/insta_icons_like.svg\" height = 12px>")
+                  meta.append("span").text(" " + likes + " ");
+                  //meta.append("span").style("font-weight", "bold").style("margin-left","1em").text("comments: ");
+                  meta.append("span").style("margin-left","0.25em").html("<img src=\"./style/insta_icons_comment.svg\" height = 12px>")
+                  meta.append("span").text(" " + comments + " ");
+                  meta.append("span").style("margin-left","0.25em").html("<a href=" + url + " target=_blank>original</a>");
 
 
-                  tooltip.style("height", "300px");
+                  tooltip.style("height", "280px");
 
                   d3.select(this).style("fill", "var(--hover)").attr("r", 7);
 
