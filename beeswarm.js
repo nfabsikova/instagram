@@ -5,11 +5,26 @@ let width = 800 - margin.left - margin.right
 let height = 700 - margin.top - margin.bottom; 
 let tickLabels = ['Jan','Feb','Mar','Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-let beeswarm = d3.select("#chart").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+let beeswarm = d3.select("#chart")
+  .append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // .append("div")
+  // // Container class to make it responsive.
+  // .classed("svg-container", true) 
+  // .append("svg")
+  // // Responsive SVG needs these 2 attributes and no width and height attr.
+  // .attr("preserveAspectRatio", "xMinYMin meet")
+  // .attr("viewBox", "0 0 800 700")
+  // // Class to make it responsive.
+  // .classed("svg-content-responsive", true)
+
+
+    // .attr("width", width + margin.left + margin.right)
+    // .attr("height", height + margin.top + margin.bottom)
 
 // Scales
 let x = d3.scaleLinear()
@@ -48,6 +63,7 @@ const posts = d3.csv("./data/data.csv", ({id, timestamp, month, year, likes, com
   ({id: id, timestamp: timestamp, month: +month, year: +year, likes: +likes, comments: +comments, url: post_url, height: +height, width: + width}));
 
 posts.then(function (data) {
+  console.log(data);
 
         //vertical lines
         let vlines = beeswarm.append("g")
@@ -138,6 +154,12 @@ posts.then(function (data) {
               //Interaction
               beeswarm.selectAll("circle").on("mouseover", function(event, d) {
 
+                    
+                let id = String(d.data.id);
+                let imgRatio = d.data.height / d.data.width
+                let imgHeight = 250;
+                let imgWidth = imgHeight * imgRatio;
+
                 d3.select(this).style("cursor", "pointer"); 
                 d3.select(this).style("fill", "var(--hover)").attr("r", 7);
                 tooltip.style("visibility", "visible");
@@ -145,18 +167,16 @@ posts.then(function (data) {
                 if (Number(d3.select(this).attr("cy")) < height/2) {
                   tooltip.classed("top", true)
                   tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  tooltip.style("top", (Number(d3.select(this).attr("cy")) + 60) + "px");
+                  // tooltip.style("top", (Number(d3.select(this).attr("cy")) + 60) + "px");
+                  tooltip.style("top", (event.pageY + 10) + "px");
                 } else {
                   tooltip.classed("top", false)
                   tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  tooltip.style("top", (Number(d3.select(this).attr("cy")) -280) + "px");
+                  // tooltip.style("top", (Number(d3.select(this).attr("cy")) -280) + "px");
+                  console.log(event.pageY + imgHeight);
+                  tooltip.style("top", (event.pageY - imgHeight - 10) + "px");
                 }
-    
-                let id = String(d.data.id);
-                console.log(d);
-                let imgRatio = d.data.height / d.data.width
-                let imgHeight = 250;
-                let imgWidth = imgHeight * imgRatio;
+
 
                 tooltip.style("width", imgWidth + "px");
                 tooltip.html("<img src=\"./data/pictures/" + id + ".jpg\" height=" + imgHeight + "width=" + imgWidth + ">");
