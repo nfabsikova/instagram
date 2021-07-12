@@ -166,14 +166,11 @@ posts.then(function (data) {
     
                 if (Number(d3.select(this).attr("cy")) < height/2) {
                   tooltip.classed("top", true)
-                  tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  // tooltip.style("top", (Number(d3.select(this).attr("cy")) + 60) + "px");
+                  tooltip.style("left", (event.pageX) + "px");
                   tooltip.style("top", (event.pageY + 10) + "px");
                 } else {
                   tooltip.classed("top", false)
-                  tooltip.style("left", (Number(d3.select(this).attr("cx")) + 64) + "px");
-                  // tooltip.style("top", (Number(d3.select(this).attr("cy")) -280) + "px");
-                  console.log(event.pageY + imgHeight);
+                  tooltip.style("left", (event.pageX) + "px");
                   tooltip.style("top", (event.pageY - imgHeight - 10) + "px");
                 }
 
